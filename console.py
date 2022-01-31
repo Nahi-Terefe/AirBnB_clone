@@ -19,17 +19,18 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     """ HBNB Command class """
     prompt = '(hbnb) '
-    classes = {'BaseModel': BaseModel}
+    classes = {'BaseModel': BaseModel, 'User': User, 'City': City,
+               'Place': Place, 'Amenity': Amenity, 'Review': Review,
+               'State': State}
     
         
-    def do_quit(self, arg):
-            """ Quit command to exit the program """
-            exit()
+    def do_quit(self, args):
+        """ Quit command to exit the program """
+        quit()
 
-    def do_EOF(self, arg):
+    def do_EOF(self, args):
         """ Exit command to exit when EOF """
-        print('')
-        exit()
+        quit()
 
     def emptyline(self):
         """ Method to pass when emptyline entered """
