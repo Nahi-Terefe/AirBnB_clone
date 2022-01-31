@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
    AirBnB console module    
 """
@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
         quit()
 
     def do_EOF(self, args):
-        """ Exit command to exit when EOF """
+        """ Exit command to exit the program when EOF """
         quit()
 
     def emptyline(self):
