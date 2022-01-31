@@ -1,5 +1,5 @@
-#!/usr/bin/python3
-""" User Module """
+#!/usr/bin/env python3
+""" User model Module """
 from models.base_model import BaseModel
 
 
