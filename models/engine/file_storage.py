@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 File Storage module:
     - serializes instances to a JSON file into storage and
@@ -10,6 +10,11 @@ import os
 from datetime import datetime
 from models.base_model import BaseModel
 from models.user import User
+from models.city import City
+from models.state import State
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage():
