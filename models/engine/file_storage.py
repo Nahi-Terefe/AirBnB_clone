@@ -21,13 +21,13 @@ class FileStorage():
     """ FilsStorage class """
     __file_path = "file.json"
     __objects = {}
-    
+
     def all(self):
         """ return dictionary objects loaded in __objects """
         return FileStorage.__objects
 
     def new(self, obj):
-        """ sets the dictionary __objects 
+        """ sets the dictionary __objects
             using obj with key <obj class name>.id """
         FileStorage.__objects[obj.__class__.__name__ + "." + str(obj.id)] = obj
 
@@ -42,7 +42,8 @@ class FileStorage():
         """ Reload the file """
         try:
             if (os.path.isfile(FileStorage.__file_path)):
-                with open(FileStorage.__file_path, 'r', encoding="utf-8") as fname:
+                with open(FileStorage.__file_path, 'r',
+                          encoding="utf-8") as fname:
                     load_json = json.load(fname)
                     for key, val in load_json.items():
                         FileStorage.__objects[key] = eval(
