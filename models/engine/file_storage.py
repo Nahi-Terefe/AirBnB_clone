@@ -40,9 +40,12 @@ class FileStorage():
 
     def reload(self):
         """ Reload the file """
-        if (os.path.isfile(FileStorage.__file_path)):
-            with open(FileStorage.__file_path, 'r', encoding="utf-8") as fname:
-                load_json = json.load(fname)
-                for key, val in load_json.items():
-                    FileStorage.__objects[key] = eval(
-                        val['__class__'])(**val)
+        try:
+            if (os.path.isfile(FileStorage.__file_path)):
+                with open(FileStorage.__file_path, 'r', encoding="utf-8") as fname:
+                    load_json = json.load(fname)
+                    for key, val in load_json.items():
+                        FileStorage.__objects[key] = eval(
+                            val['__class__'])(**val)
+        except FileNotFoundError:
+            pass
