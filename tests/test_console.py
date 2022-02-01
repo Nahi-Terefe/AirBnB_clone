@@ -15,7 +15,7 @@ import os
 import unittest
 from io import StringIO
 from unittest.mock import patch
-from models import storage
+import models
 from console import HBNBCommand
 from models.base_model import BaseModel
 from models.user import User
@@ -115,7 +115,7 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd("create" + " " + i)
                 id_val = f.getvalue().strip()
                 self.assertTrue(i + "." +
-                                id_val in storage._FileStorage__objects.keys())
+                                id_val in models.storage._FileStorage__objects.keys())
 
     def test_show(self):
         """Tests if the show command is functioning as expected."""
@@ -129,7 +129,7 @@ class TestConsole(unittest.TestCase):
                 f.seek(0)
                 HBNBCommand().onecmd("show" + " " + i + " " + id_val)
                 str_obj = f.getvalue().strip()
-                self.assertEqual(str(storage._FileStorage__objects
+                self.assertEqual(str(models.storage._FileStorage__objects
                                             .get(i + "." + id_val)), str_obj)
 
     def test_destroy(self):
@@ -143,11 +143,11 @@ class TestConsole(unittest.TestCase):
                 f.truncate(0)
                 f.seek(0)
                 self.assertTrue(i + "."
-                                  + id_val in storage
+                                  + id_val in models.storage
                                 ._FileStorage__objects.keys())
                 HBNBCommand().onecmd("destroy" + " " + i + " " + id_val)
                 self.assertTrue(i + "."
-                                  + id_val not in storage
+                                  + id_val not in models.storage
                                 ._FileStorage__objects.keys())
 
     def test_all(self):
@@ -158,8 +158,8 @@ class TestConsole(unittest.TestCase):
             f.truncate(0)
             f.seek(0)
             lst_all = []
-            for key in storage._FileStorage__objects.keys():
-                lst_all.append(str(storage._FileStorage__objects[key]))
+            for key in models.storage._FileStorage__objects.keys():
+                lst_all.append(str(models.storage._FileStorage__objects[key]))
             HBNBCommand().onecmd("all")
             self.assertEqual(f.getvalue().strip(), str(lst_all))
 
@@ -174,7 +174,7 @@ class TestConsole(unittest.TestCase):
                 HBNBCommand().onecmd("count" + " " + i)
                 count = f.getvalue().strip()
                 count_expected = 0
-                for value in storage._FileStorage__objects.values():
+                for value in models.storage._FileStorage__objects.values():
                     if isinstance(value, TestConsole.all_classes[i]):
                         count_expected += 1
                 self.assertEqual(int(count), count_expected)
