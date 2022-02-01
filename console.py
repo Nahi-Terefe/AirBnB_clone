@@ -51,6 +51,52 @@ class HBNBCommand(cmd.Cmd):
 
     error_occurred = False
 
+    def precmd(self, line):
+        """Manipulate the user input before getting processed."""
+        if '{' in line and '}' in line:
+            args = re.findall(r"([^(,):{}]+)", line)
+            args = [x.strip() for x in args]
+            args[:] = [x for x in args if x]
+            class_name = args[0].split('.')[0]
+            cmd_name = args[0].split('.')[1]
+            id_val = args[1].strip("'")
+            del args[0]
+            del args[0]
+            print(args)
+            j = 0
+            for i in range(len(args) // 2):
+                loop_line = ""
+                key = args[j].strip("'")
+                value = args[j + 1].strip("'")
+                loop_line = cmd_name + " " + class_name + " "\
+                                     + id_val.strip('"') + " "\
+                                     + key.strip('"') + " "\
+                                     + value
+                j += 2
+                cmd.Cmd.onecmd(self, loop_line)
+                if HBNBCommand.error_occured:
+                    break
+            line = ""
+
+        elif '.' in line and '(' in line and ')' in line:
+            args = re.findall(r"([^(,):{}]+)", line)
+            args = [x.strip() for x in args]
+            args[:] = [x for x in args if x]
+            class_name = args[0].split('.')[0]
+            cmd_name = args[0].split('.')[1]
+            if cmd_name not in HBNBCommand.all_commands:
+                line = cmd_name
+            elif len(args) > 1:
+                id_val = args[1].strip('"')
+                del args[0]
+                del args[0]
+                line = cmd_name + " " + class_name + " " + id_val
+                for i in args:
+                    line = line + " " + i
+            else:
+                line = cmd_name + " " + class_name
+        return line
+
     def do_quit(self, args):
         """Quit command to exit the program\n"""
         quit()
