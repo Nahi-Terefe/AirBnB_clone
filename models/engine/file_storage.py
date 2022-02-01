@@ -1,66 +1,74 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+""" Class FileStorage that serializes instances to a JSON file
+    and deserializes JSON file to instances
 """
-This is the "file_storage" module.
-The file_storage module supplies one class, FileStorage, that\
-that serializes instances to a JSON file and deserializes JSON\
-file to instances.
 
-For example,
-FileStorage()
-"""
 import json
+from os import read
+from models.base_model import BaseModel
+from models.city import City
+from models.state import State
+from models.user import User
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+import os.path
 
 
 class FileStorage:
-    """Defines a class FileStorage.
-
-    Attributes:
-        __file_path (str): id of the class
-        __objects (dictionary): created date of the class
     """
-
-    __file_path = "file.json"
-    __objects = {}
+    Class FileStorage that serializes and deserialize instances to JSON
+        __file_path: the path of the json file
+        __objects: a dictionnary of all objects"
+    """
+    def __init__(self):
+        """ initializes FileStorage
+        """
+        self.__file_path = "file.json"
+        self.__objects = {}
 
     def all(self):
-        """Returns the dictionary __objects"""
-        return FileStorage.__objects
+        """Returns a dictionary of all objects"""
+        return self.__objects
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
-        obj_key = obj.__class__.__name__ + "." + obj.id
-        FileStorage.__objects.update({obj_key: obj})
+        key = obj.__class__.__name__ + "." + obj.id
+        self.__objects[key] = obj
 
     def save(self):
-        """serializes __objects to the JSON file (path: __file_path)"""
-        with open(FileStorage.__file_path, 'w') as f:
-            save_r = {}
-            save_r.update(FileStorage.__objects)
-            for key, value in save_r.items():
-                save_r.update({key: value.to_dict()})
-            json.dump(save_r, f)
+        """serializes __objects to the JSON file (path: __file_path)
+            dicttionary: an empty dictionnary
+                Open the dictionary in write mode
+                dump the dictionary in the file f
+        """
+        dictionary = {}
+        with open(self.__file_path, 'w') as f:
+            for obj in self.__objects.values():
+                key = obj.__class__.__name__ + "." + obj.id
+                dictionary[key] = obj.to_dict()
+            json.dump(dictionary, f)
 
     def reload(self):
-        """deserializes the JSON file to __objects (only if the JSON\
-        file (__file_path) exists.
-        """
-        from models.base_model import BaseModel
-        from models.user import User
-        from models.state import State
-        from models.city import City
-        from models.amenity import Amenity
-        from models.place import Place
-        from models.review import Review
-
-        all_classes = {'BaseModel': BaseModel, 'User': User,
-                       'State': State, 'City': City,
-                       'Amenity': Amenity, 'Place': Place,
-                       'Review': Review}
+        """deserializes the JSON file to __objects
+        (only if the JSON file (__file_path) exists
+        otherwise, do nothing.
+        If the file doesn’t exist, no exception should be raised)
+            Open in read mode"
+            load the file f and read it
+            """
         try:
-            with open(FileStorage.__file_path, "r") as f:
-                open_r = json.load(f)
-                for key, value in open_r.items():
-                    FileStorage.__objects.update(
-                        {key: all_classes[value['__class__']](**value)})
-        except Exception:
+            with open(self.__file_path, 'r') as f:
+                my_dict = json.load(f)
+            for key, value in my_dict.items():
+                """this for loop utilise a key value pair to run
+                    my_dict.items() and create a dictionary of key and value"""
+                new_object = key.split('.')
+                class_name = new_object[0]
+                """new_object is equal to key.split('.')[0]
+                    this split the key and take the first part of the key"""
+                self.new(eval("{}".format(class_name))(**value))
+                """this if statement is used to create a new object
+                    with the class name of new_object and its value"""
+        except FileNotFoundError:
             pass
