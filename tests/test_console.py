@@ -11,6 +11,7 @@ Unittest classes:
     Test_console_update
     Test_console_count
     """
+from importlib.machinery import SourceFileLoader
 import os
 import unittest
 from io import StringIO
@@ -24,6 +25,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review 
+import sys
 
 
 class TestConsole(unittest.TestCase):
