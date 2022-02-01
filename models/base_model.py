@@ -9,7 +9,14 @@ import models
 
 
 class BaseModel:
-    """Base class for all models"""
+    """
+    Defines a class BaseModel.
+
+    Attributes:
+        id (str): id of the class
+        created_at (str): created date of the class
+        updated_at (str): updated date of the class
+    """
 
     def __init__(self, *args, **kwargs):
         """ instantiates a new object

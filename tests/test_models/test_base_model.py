@@ -12,6 +12,7 @@ import unittest
 from datetime import datetime
 from time import sleep
 from models.base_model import BaseModel
+import os
 
 # test_BaseModel_instantiation
 
@@ -148,6 +149,14 @@ class Test_BaseModel_str(unittest.TestCase):
         self.assertIn("created_at", bm.to_dict())
         self.assertIn("updated_at", bm.to_dict())
         self.assertIn("__class__", bm.to_dict())
+        
+        
+    def tearDown(self):
+        """Remove storage file after test ends."""
+        try:
+            os.remove('file.json')
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
