@@ -33,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
     - classes is a list of all the classes that inherit from BaseModel.
     - my_objects is a dictionary of all the instances of the classes
         in classes.
-    - my_classes oa diccionary whit the classes.
+    - my_classes oa dictionary whit the classes.
     - storage is an instance of FileStorage.
     - self is an instance of HBNBCommand to use the methods of the class.
     - args is a list of arguments passed to the command.
@@ -126,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
         elif args_list[0] in my_classes:
             """if the args_list[0] is in my_classes, then the class exists"""
             if len(args_list) > 1:
-                """if the lenght of args_list is greater than 1,
+                """if the length of args_list is greater than 1,
                 then the id is passed"""
                 key = args_list[0] + "." + args_list[1]
                 """key = args_list[0] + "." + args_list[1]
