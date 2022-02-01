@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-   AirBnB console module    
+AirBnB console module    
 """
 
 import cmd
@@ -53,7 +53,10 @@ class HBNBCommand(cmd.Cmd):
                     print("** class doesn't exist **")
 
     def do_show(self, arg):
-        """ Method to print instance """
+        """ 
+        Prints the string representation of an instance based
+        on the class name and id 
+        """
         if len(arg) == 0:
             print('** class name missing **')
             return
@@ -71,7 +74,10 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
 
     def do_destroy(self, arg):
-        """ Method to delete instance with class and id """
+        """ 
+        Deletes an instance based on the class name and id
+        and save the change into the JSON file 
+        """
         if len(arg) == 0:
             print("** class name missing **")
             return
@@ -94,7 +100,10 @@ class HBNBCommand(cmd.Cmd):
                 return
 
     def do_all(self, arg):
-        """ Method to print all instances """
+        """
+        Prints all string representation of all instances based
+        or not on the class name
+        """
         if len(arg) == 0:
             print([str(a) for a in storage.all().values()])
         elif arg not in self.classes:
@@ -103,7 +112,10 @@ class HBNBCommand(cmd.Cmd):
             print([str(a) for b, a in storage.all().items() if arg in b])
 
     def do_update(self, arg):
-        """ Method to update JSON file"""
+        """
+        Updates an instance based on the class name and id by
+        adding or updating attribute and save the change into the JSON file
+        """
         arg = arg.split()
         if len(arg) == 0:
             print('** class name missing **')
@@ -130,6 +142,25 @@ class HBNBCommand(cmd.Cmd):
                     print('** attribute name missing **')
             else:
                 print('** no instance found **')
+
+    def do_count(self, args):
+        """Counts the number of instances of a certain class"""
+        counter = 0
+        my_objects = models.storage.all()
+        """my_objects is a dictionary with the key and value of the
+             dictionary"""
+        if args in self.classes:
+            for key in my_objects.keys():
+                """for key in my_objects.keys() is a loop that
+                iterates over the keys of the dictionary"""
+                find_class = key.split(".")
+                """find_class is a list of the key split by "." """
+                if find_class[0] == args:
+                    """if find_class[0] == args, then the class name
+                    is the same as the args"""
+                    counter += 1
+                    """counter += 1 is a function that adds 1 to the counter"""
+            print(counter)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
