@@ -1,26 +1,25 @@
-#!/usr/bin/python3
-"""
-This is the "user" module.
-The user module supplies one class, User, that\
-inherits from BaseModel and holds user information\
-such as email, password, first name and last name.
-
-For example,
-User()
-"""
+#!/usr/bin/env python3
+""" Class User """
 from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """Defines a class User.
-
-    Attributes:
-        email (str): email of the user
-        password (str): password of the user
-        first_name (str): first name of the user
-        last_name (str): last name of the user
+    """ Class user that inherits from BaseModel
+        Public class attributes:
+            email: (str) - user's email
+            password: (str) - user's password
+            first_name: (str) - user's first name
+            last_name: (str) - user's last name
     """
     email = ""
     password = ""
     first_name = ""
     last_name = ""
+
+    def __init__(self, *args, **kwargs):
+        """ Initialize class User
+            Args:
+                *args: list of strings
+                **kwargs: dictionary of strings
+                """
+        super().__init__(*args, **kwargs)
