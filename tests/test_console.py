@@ -13,19 +13,36 @@ Unittest classes:
     Test_console_count
     """
 
-from console import HBNBCommand
+import os
 import unittest
 from io import StringIO
 from unittest.mock import patch
+from console import HBNBCommand
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from models import storage
+
 
 # ******************************************
 # prompt
 # ******************************************
 
 
-class Test_console_prompt(unittest.TestCase):
+class TestConsole(unittest.TestCase):
     """test prompting of the command interpreter"""
+
+    all_classes_name = ["BaseModel", "User", "State", "City", "Amenity",
+                        "Place", "Review"]
+    all_classes = {'BaseModel': BaseModel, 'User': User,
+                   'State': State, 'City': City,
+                   'Amenity': Amenity, 'Place': Place,
+                   'Review': Review}
+
     def test_prompt_string(self):
         self.assertEqual("(hbnb) ", HBNBCommand.prompt)
 
@@ -38,15 +55,13 @@ class Test_console_prompt(unittest.TestCase):
 # exit
 # ******************************************
 
-
-class Test_console_exit(unittest.TestCase):
-    """Unittests for testing exiting from the HBNB command interpreter."""
-
     def test_exit_exit(self):
+        """Unittests for testing exiting from the HBNB command interpreter."""
         with patch("sys.stdout", new=StringIO()) as output:
             pass
 
     def test_exit_EOF(self):
+        """Unittests for testing exiting from the HBNB command interpreter."""
         with patch("sys.stdout", new=StringIO()) as output:
             pass
 
@@ -54,11 +69,8 @@ class Test_console_exit(unittest.TestCase):
 # help
 # ******************************************
 
-
-class Test_Console_help(unittest.TestCase):
-    """test help command"""
     def test_help_quit(self):
-        help = "Quit command to exit the program."
+        help = "Quit command to exit the program"
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("help quit"))
             self.assertEqual(help, f.getvalue().strip())
@@ -124,56 +136,88 @@ class Test_Console_help(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(""))
             self.assertEqual("", f.getvalue().strip())
 
-    # def test_get_class(self):
-    #     with patch("sys.stdout", new=StringIO()) as f:
-    #         self.assertFalse(HBNBCommand().onecmd("all"))
-    #         self.assertEqual("", f.getvalue().strip())
-
-    # def test_get_class_wrong(self):
-    #     with patch("sys.stdout", new=StringIO()) as f:
-    #         self.assertFalse(HBNBCommand().onecmd("all "))
-    #         self.assertEqual("", f.getvalue().strip())
-
 # ******************************************
-# commands
+# console commands
 # ******************************************
+    def test_create(self):
+        """Tests if the create command is functioning as expected."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            for i in TestConsole.all_classes_name:
+                f.truncate(0)
+                f.seek(0)
+                HBNBCommand().onecmd("create" + " " + i)
+                id_val = f.getvalue().strip()
+                self.assertTrue(i + "." +
+                                id_val in storage._FileStorage__objects.keys())
 
-    def test_commandobject(self):
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Review"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "Review.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "BaseModel.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create City"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "City.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Amenity"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "Amenity.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create Place"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "Place.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create User"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "User.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("create State"))
-            self.assertLess(0, len(output.getvalue().strip()))
-            testKey = "State.{}".format(output.getvalue().strip())
-            self.assertIn(testKey, storage.all().keys())
+    def test_show(self):
+        """Tests if the show command is functioning as expected."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            for i in TestConsole.all_classes_name:
+                f.truncate(0)
+                f.seek(0)
+                HBNBCommand().onecmd("create" + " " + i)
+                id_val = f.getvalue().strip()
+                f.truncate(0)
+                f.seek(0)
+                HBNBCommand().onecmd("show" + " " + i + " " + id_val)
+                str_obj = f.getvalue().strip()
+                self.assertEqual(str(storage._FileStorage__objects
+                                            .get(i + "." + id_val)), str_obj)
+
+    def test_destroy(self):
+        """Tests if the destroy command is functioning as expected."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            for i in TestConsole.all_classes_name:
+                f.truncate(0)
+                f.seek(0)
+                HBNBCommand().onecmd("create" + " " + i)
+                id_val = f.getvalue().strip()
+                f.truncate(0)
+                f.seek(0)
+                self.assertTrue(i + "."
+                                  + id_val in storage
+                                ._FileStorage__objects.keys())
+                HBNBCommand().onecmd("destroy" + " " + i + " " + id_val)
+                self.assertTrue(i + "."
+                                  + id_val not in storage
+                                .all().keys())
+
+    def test_all(self):
+        """Tests if the all command is functioning as expected."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            for i in TestConsole.all_classes_name:
+                HBNBCommand().onecmd("create" + " " + i)
+            f.truncate(0)
+            f.seek(0)
+            lst_all = []
+            for key in storage._FileStorage__objects.keys():
+                lst_all.append(str(storage._FileStorage__objects[key]))
+            HBNBCommand().onecmd("all")
+            self.assertEqual(f.getvalue().strip(), str(lst_all))
+
+    def test_count(self):
+        """Tests if the count command is functioning as expected."""
+        with patch('sys.stdout', new=StringIO()) as f:
+            for i in TestConsole.all_classes_name:
+                HBNBCommand().onecmd("create" + " " + i)
+            for i in TestConsole.all_classes_name:
+                f.truncate(0)
+                f.seek(0)
+                HBNBCommand().onecmd("count" + " " + i)
+                count = f.getvalue().strip()
+                count_expected = 0
+                for value in storage._FileStorage__objects.values():
+                    if isinstance(value, TestConsole.all_classes[i]):
+                        count_expected += 1
+                self.assertEqual(int(count), count_expected)
+
+    def tearDown(self):
+        """Remove storage file after test ends."""
+        try:
+            os.remove('file.json')
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":

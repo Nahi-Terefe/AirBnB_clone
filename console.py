@@ -2,6 +2,7 @@
 """
 Console for object management and storage persistant
 """
+
 import models
 from models.base_model import BaseModel
 from models.user import User
@@ -11,6 +12,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.engine.file_storage import FileStorage
+from models import storage
 import os
 import sys
 import json
@@ -50,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
     error_occurred = False
 
     def do_quit(self, args):
-        """Quit command to exit the program.\n"""
+        """Quit command to exit the program\n"""
         quit()
 
     def do_EOF(self, args):
@@ -89,7 +91,7 @@ saves it (to the JSON file) and prints the id.
         else:
             key_obj = args[0] + "." + args[1]
             try:
-                print(storage._FileStorage__objects[key_obj])
+                print(str(storage._FileStorage__objects[key_obj]))
             except KeyError:
                 print('** no instance found **')
 
