@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 """
-Unit tests for console.py
-Unittest classes:
-    Test_console_prompt
-    Test_console_exit
-    Test_console_help
-    Test_console_create
-    Test_console_show
-    Test_console_destroy
-    Test_console_all
-    Test_console_update
-    Test_console_count
-    """
+===============================================================================
+████████╗███████╗███████╗████████╗     ██████╗ █████╗ ███████╗███████╗███████╗
+╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝    ██╔════╝██╔══██╗██╔════╝██╔════╝██╔════╝
+   ██║   █████╗  ███████╗   ██║       ██║     ███████║███████╗█████╗  ███████╗
+   ██║   ██╔══╝  ╚════██║   ██║       ██║     ██╔══██║╚════██║██╔══╝  ╚════██║
+   ██║   ███████╗███████║   ██║       ╚██████╗██║  ██║███████║███████╗███████║
+   ╚═╝   ╚══════╝╚══════╝   ╚═╝        ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
+===============================================================================
+"""
 
 import os
 import unittest
@@ -28,11 +25,6 @@ from models.review import Review
 from models import storage
 
 
-# ******************************************
-# prompt
-# ******************************************
-
-
 class TestConsole(unittest.TestCase):
     """test prompting of the command interpreter"""
 
@@ -43,27 +35,10 @@ class TestConsole(unittest.TestCase):
                    'Amenity': Amenity, 'Place': Place,
                    'Review': Review}
 
-    def test_prompt_string(self):
-        self.assertEqual("(hbnb) ", HBNBCommand.prompt)
-
-    def test_empty_ine(self):
+    def test_emptyline(self):
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd(""))
             self.assertEqual("", f.getvalue().strip())
-
-# ******************************************
-# exit
-# ******************************************
-
-    def test_exit_exit(self):
-        """Unittests for testing exiting from the HBNB command interpreter."""
-        with patch("sys.stdout", new=StringIO()) as output:
-            pass
-
-    def test_exit_EOF(self):
-        """Unittests for testing exiting from the HBNB command interpreter."""
-        with patch("sys.stdout", new=StringIO()) as output:
-            pass
 
 # ******************************************
 # help
@@ -211,13 +186,6 @@ class TestConsole(unittest.TestCase):
                     if isinstance(value, TestConsole.all_classes[i]):
                         count_expected += 1
                 self.assertEqual(int(count), count_expected)
-
-    def tearDown(self):
-        """Remove storage file after test ends."""
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
 
 
 if __name__ == "__main__":
