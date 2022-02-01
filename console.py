@@ -49,9 +49,10 @@ class HBNBCommand(cmd.Cmd):
                "Place",
                "Review"]
 
-    """reload() reloads the JSON file
-
-    instances = ["do_show", "do_destroy", "do_all", "do_update"]"""
+    """
+    reload() reloads the JSON file
+    instances = ["do_show", "do_destroy", "do_all", "do_update"]
+    """
 
     def do_quit(self, args):
         """Quit command to exit the program.\n"""
