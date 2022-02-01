@@ -13,13 +13,9 @@ from models.place import Place
 from models.review import Review
 from models.engine.file_storage import FileStorage
 from models import storage
-import os
-import sys
-import json
 import cmd
-import shlex
+import re
 
-""" 6. Console 0.0.1 """
 
 my_classes = {"BaseModel": BaseModel, "User": User, "State": State,
               "City": City, "Amenity": Amenity,
