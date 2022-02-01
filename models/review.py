@@ -1,23 +1,24 @@
-#!/usr/bin/env python3
-""" Class Review"""
+#!/usr/bin/python3
+"""
+This is the "review" module.
+The review module supplies one class, Review, that\
+inherits from BaseModel and holds user information\
+such as place_id, user_id and text.
+
+For example,
+Review()
+"""
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """ Public class attributes:
+    """Defines a class Review.
 
-    place_id: string - (str): Place.id
-    user_id: string - (str): User.id
-    text: string - (str): text of the review
+    Attributes:
+        place_id (str): id of the place
+        user_id (str): id of the user
+        text (str): the review text
     """
     place_id = ""
     user_id = ""
     text = ""
-
-    def __init__(self, *args, **kwargs):
-        """ Initialize a Review instance
-            Args:
-                *args: list of strings
-                **kwargs: dictionary of strings
-        """
-        super().__init__(*args, **kwargs)

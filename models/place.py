@@ -1,22 +1,31 @@
-#!/usr/bin/env python3
-"""" Class place """
+#!/usr/bin/python3
+"""
+This is the "place" module.
+The place module supplies one class, Place, that\
+inherits from BaseModel and holds the state informations\
+listed below in the attributes.
+
+For example,
+Place()
+"""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """ Class place inherits from BaseModel
-    Public class attributes:
-        city_id: string - (str): City.id
-        user_id: string - (str): User.id
-        name: (str) - Name of the place
-        description: (str) - Description of the place
-        number_rooms: (int) - Number of rooms of the place
-        number_bathrooms: (int) - Number of bathrooms of the place
-        max_guest: (int) - Maximum number of guests that can be accommodated
-        price_by_night: (int) - Price per night
-        latitude: (float) - Latitude of the place
-        longitude: (float) - Longitude of the place
-        amenity_ids: (list) - List of Amenity.id
+    """Defines a class Place.
+
+    Attributes:
+        city_id (str): the city id
+        user_id (str): the user id
+        name (str): the state name
+        description (str): description of the place
+        number_rooms (int): number of rooms
+        number_bathrooms (int): number of bathrooms
+        max_guest (int): maximum of amount guest
+        price_by_night (int): price at night
+        latitude (float): latitude of the place
+        longitude (float): longitude of the place
+        amenity_ids (list): list of amenity ids
     """
     city_id = ""
     user_id = ""
@@ -29,11 +38,3 @@ class Place(BaseModel):
     latitude = 0.0
     longitude = 0.0
     amenity_ids = []
-
-    def __init__(self, *args, **kwargs):
-        """ Initialize class Place
-            Args:
-                *args: list of strings
-                **kwargs: dictionary of strings
-                """
-        super().__init__(*args, **kwargs)

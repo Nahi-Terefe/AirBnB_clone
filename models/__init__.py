@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
-"""__init__ magic method initializes the package"""
+"""
+This is "__init.py" module of "models" package.
+
+The __init__.py module makes Python treat directories\
+containing the file as packages.
+"""
 from models.engine.file_storage import FileStorage
 
 
