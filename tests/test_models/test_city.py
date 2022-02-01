@@ -1,52 +1,46 @@
-#!/usr/bin/python3
-"""Unittest module for the City Class."""
-
+#!/usr/bin/env python3
+"""
+unittests for the City class
+"""
 import unittest
-from datetime import datetime
-import time
 from models.city import City
-import re
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
 
 
-class TestCity(unittest.TestCase):
+class testfile(unittest.TestCase):
+    """ unittests for City class """
+    def test_inheritance(self):
+        """ checks if it inherits from BaseModel """
+        self.assertTrue(issubclass(City, BaseModel))
 
-    """Test Cases for the City class."""
+    def test_attributes(self):
+        """ checks if it has the correct attributes """
+        self.assertTrue('state_id' in City.__dict__)
+        self.assertTrue('name' in City.__dict__)
 
-    def setUp(self):
-        """Sets up test methods."""
-        pass
+    def test_str(self):
+        """ checks if the str method works """
+        my_city = City()
+        string = "[City] ({}) {}".format(my_city.id, my_city.__dict__)
+        self.assertEqual(string, str(my_city))
 
-    def tearDown(self):
-        """Tears down test methods."""
-        self.resetStorage()
-        pass
+    def test_save(self):
+        """ checks if the save method works """
+        my_city = City()
+        my_city.save()
+        self.assertNotEqual(my_city.created_at, my_city.updated_at)
 
-    def resetStorage(self):
-        """Resets FileStorage data."""
-        FileStorage._FileStorage__objects = {}
-        if os.path.isfile(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_to_dict(self):
+        """ checks if the to_dict method works """
+        my_city = City()
+        new_dict = my_city.to_dict()
+        self.assertEqual(type(new_dict), dict)
+        self.assertTrue('to_dict' in dir(my_city))
 
-    def test_8_instantiation(self):
-        """Tests instantiation of City class."""
+    def test_docstring(self):
+        """ checks if the docstring is correct """
+        self.assertIsNotNone(City.__doc__)
 
-        b = City()
-        self.assertEqual(str(type(b)), "<class 'models.city.City'>")
-        self.assertIsInstance(b, City)
-        self.assertTrue(issubclass(type(b), BaseModel))
-
-    def test_8_attributes(self):
-        """Tests the attributes of City class."""
-        attributes = storage.attributes()["City"]
-        o = City()
-        for k, v in attributes.items():
-            self.assertTrue(hasattr(o, k))
-            self.assertEqual(type(getattr(o, k, None)), v)
 
 if __name__ == "__main__":
     unittest.main()
