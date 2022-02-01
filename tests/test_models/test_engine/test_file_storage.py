@@ -1,44 +1,73 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
-The ``test_file_storage`` module
-==============================
-
-Using ``test_file_storage``
--------------------------
-
-This is a test_file_storage unittest file to test the file_storage module.
-
+Unitest for the FileStorage class
 """
 import unittest
+import models
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
-from models import storage
-import os
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class TestFileStorage(unittest.TestCase):
-    """Defines a class TestFileStorage.
 
-    Test functionality of the file_storage module.
-    """
-    def tearDown(self):
-        """Remove storage file after test ends."""
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
+    def test_doc(self):
+        """claass ann method docstrings"""
 
-    def test_storage_type(self):
-        """Test if the dictionary in storage is actually dict."""
-        obj = BaseModel()
-        self.assertTrue(type(storage.all()), dict)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.
+                             all.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.
+                             __init__.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.
+                             new.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.
+                             save.__doc__)
+        self.assertIsNotNone(models.engine.file_storage.FileStorage.
+                             reload.__doc__)
 
-    def test_creation(self):
-        """Test if the created object is stored."""
-        obj = BaseModel()
-        self.assertTrue(obj in storage.all().values())
+    def test_classes(self):
+        """check if classes are created"""
 
-    def test_storage_object(self):
-        """Test if the stored object is the actual object."""
-        obj = BaseModel()
-        all_objs = storage.all()
-        self.assertIsInstance(list(all_objs.values())[0], BaseModel)
+        self.assertIsInstance(models.engine.file_storage.FileStorage(),
+                              models.engine.file_storage.FileStorage)
+
+    def test_all(self):
+        """check if all method is working"""
+
+        self.assertIsNotNone(models.engine.file_storage.FileStorage().all)
+
+    def test_new(self):
+        """check if new method is working"""
+
+        self.assertIsNotNone(models.engine.file_storage.FileStorage().new)
+
+    def test_save(self):
+        """check if save method is working"""
+
+        self.assertIsNotNone(models.engine.file_storage.FileStorage().save)
+
+    def test_reload(self):
+        """check if reload method is working"""
+
+        self.assertIsNotNone(models.engine.file_storage.FileStorage().reload)
+
+    def test_all_method(self):
+        """check if all method is working"""
+
+        self.assertIsNotNone(models.engine.file_storage.FileStorage().all())
+
+    def test_models_all(self):
+        """check if all method is working"""
+
+        self.assertIsNotNone(models.storage.all())
+
+
+if __name__ == '__main__':
+    unittest.main()

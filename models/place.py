@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""" place module """
+"""" Class place """
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """
-    Class place inherits from BaseModel
+    """ Class place inherits from BaseModel
     Public class attributes:
         city_id: string - (str): City.id
         user_id: string - (str): User.id

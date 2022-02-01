@@ -1,11 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
-This is the "console" file.
-
-The console file contains the entry point of the command interpreter.
+Console for object management and storage persistant
 """
-import cmd
-import re
+import models
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -13,16 +10,35 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from models import storage
+from models.engine.file_storage import FileStorage
+import os
+import sys
+import json
+import cmd
+import shlex
+
+""" 6. Console 0.0.1 """
+
+my_classes = {"BaseModel": BaseModel, "User": User, "State": State,
+              "City": City, "Amenity": Amenity,
+              "Place": Place, "Review": Review}
 
 
 class HBNBCommand(cmd.Cmd):
-    """Defines a class HBNBCommand.
+    """-HBNBCommand(cmd.Cmd) is a class that inherits from cmd.Cmd
+                    cmd.Cmd is methods to execute a command prompt command
+                    line interface for a Python program.
+       -prompt is a interpreter-specific string that is displayed to the user
+       when they are ready to enter a command.
+       -classes is a list of all the classes that inherit from BaseModel.
+       -my_objects is a dictionary of all the instances of the classes
+       in classes.
+       -my_classes oa dictionary whit the classes.
+       -storage is an instance of FileStorage.
+       -self is an instance of HBNBCommand to use the methods of the class.
+       -args is a list of arguments passed to the command.
+       -args_list is a list of arguments passed to the command."""
 
-    Attributes:
-        prompt (str): prompt to display to the user
-        all_classes (dict): list of all classes
-    """
     prompt = "(hbnb) "
     all_classes = {'BaseModel': BaseModel, 'User': User,
                    'State': State, 'City': City,
@@ -31,69 +47,24 @@ class HBNBCommand(cmd.Cmd):
 
     all_commands = ['create', 'show', 'destroy', 'all', 'update', 'count']
 
-    error_occured = False
+    error_occurred = False
+
+    def do_quit(self, args):
+        """Quit command to exit the program.\n"""
+        quit()
+
+    def do_EOF(self, args):
+        """End Of File command to exit the program"""
+        quit()
 
     def emptyline(self):
-        """Do nothing if no command is entered."""
+        """Do nothing on empty line\n"""
         pass
 
-    def precmd(self, line):
-        """Manipulate the user input before getting processed."""
-        if '{' in line and '}' in line:
-            args = re.findall(r"([^(,):{}]+)", line)
-            args = [x.strip() for x in args]
-            args[:] = [x for x in args if x]
-            class_name = args[0].split('.')[0]
-            cmd_name = args[0].split('.')[1]
-            id_val = args[1].strip("'")
-            del args[0]
-            del args[0]
-            print(args)
-            j = 0
-            for i in range(len(args) // 2):
-                loop_line = ""
-                key = args[j].strip("'")
-                value = args[j + 1].strip("'")
-                loop_line = cmd_name + " " + class_name + " "\
-                                     + id_val.strip('"') + " "\
-                                     + key.strip('"') + " "\
-                                     + value
-                j += 2
-                cmd.Cmd.onecmd(self, loop_line)
-                if HBNBCommand.error_occured:
-                    break
-            line = ""
-
-        elif '.' in line and '(' in line and ')' in line:
-            args = re.findall(r"([^(,):{}]+)", line)
-            args = [x.strip() for x in args]
-            args[:] = [x for x in args if x]
-            class_name = args[0].split('.')[0]
-            cmd_name = args[0].split('.')[1]
-            if cmd_name not in HBNBCommand.all_commands:
-                line = cmd_name
-            elif len(args) > 1:
-                id_val = args[1].strip('"')
-                del args[0]
-                del args[0]
-                line = cmd_name + " " + class_name + " " + id_val
-                for i in args:
-                    line = line + " " + i
-            else:
-                line = cmd_name + " " + class_name
-        return line
-
-    def do_quit(self, arg):
-        """Quits the command interpreter."""
-        exit()
-
-    def do_EOF(self, arg):
-        """Quits the command interpreter."""
-        print()
-        exit()
-
     def do_create(self, arg):
-        """Creates an instance from a class."""
+        """Creates a new instance of BaseModel \
+saves it (to the JSON file) and prints the id.
+        """
         args = arg.split()
         if len(args) < 1:
             print('** class name missing **')
@@ -106,7 +77,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
 
     def do_show(self, arg):
-        """Shows the string representation of the object."""
+        """Prints the string representation of an instance, format:
+        show <class name> <id>."""
         args = arg.split()
         if len(args) < 1:
             print('** class name missing **')
@@ -122,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
                 print('** no instance found **')
 
     def do_destroy(self, arg):
-        """Destroys the object passed."""
+        """Deletes an instance based on the class name and id."""
         args = arg.split()
         if len(args) < 1:
             print('** class name missing **')
@@ -139,7 +111,8 @@ class HBNBCommand(cmd.Cmd):
                 print('** no instance found **')
 
     def do_all(self, arg):
-        """Displays list of all objects in the application."""
+        """Prints all string representation of all instances
+        based or not on the class name."""
         args = arg.split()
         if len(args) < 1:
             lst_all = []
@@ -157,28 +130,29 @@ class HBNBCommand(cmd.Cmd):
                 print(lst_all)
 
     def do_update(self, arg):
-        """Updates an object with the values passed from the command line."""
-        HBNBCommand.error_occured = False
+        """Updates an instance based on the class name and id by adding or
+        updating attribute (save the change into the JSON file)."""
+        HBNBCommand.error_occurred = False
         args = re.findall(r'[^\"\s]\S*|\".+?\"', arg)
         if len(args) < 1:
             print('** class name missing **')
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         elif args[0] not in HBNBCommand.all_classes.keys():
             print("** class doesn't exist **")
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         elif len(args) < 2:
             print('** instance id missing **')
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         elif (args[0] + "." + args[1]) not in\
                 storage._FileStorage__objects.keys():
             print('** no instance found **')
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         elif len(args) < 3:
             print('** attribute name missing **')
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         elif len(args) < 4:
             print('** value missing **')
-            HBNBCommand.error_occured = True
+            HBNBCommand.error_occurred = True
         else:
             key_obj = args[0] + "." + args[1]
             selected_obj = storage._FileStorage__objects[key_obj]
@@ -196,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
             updated_obj.save()
 
     def do_count(self, arg):
-        """Counts the number of instances of a class."""
+        """counts the number of instances of a class"""
         args = arg.split()
         if len(args) < 1:
             print('** class name missing **')
@@ -210,43 +184,6 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
-    def help_quit(self):
-        """Displays the function of the quit command."""
-        print('Quit command to exit the program')
 
-    def help_EOF(self):
-        """Displays the function of EOF."""
-        print('Exits the program')
-
-    def help_create(self):
-        """Displays the function of the create command."""
-        print('Creates a new instance of a class, saves it to file and prints\
- the id')
-
-    def help_show(self):
-        """Displays the function of the show command."""
-        print('Prints the string representation of an instance based on the\
- class name and id')
-
-    def help_destroy(self):
-        """Displays the function of the destroy command."""
-        print('Deletes an instance based on the class name and id and save the\
- change into the JSON file')
-
-    def help_all(self):
-        """Displays the function of the all command."""
-        print('Prints all string representation of all instances based or\
- not on the class name.')
-
-    def help_update(self):
-        """Displays the function of the update command."""
-        print('Updates an instance based on the class name and id by adding or\
- updating attribute and save the change into the JSON file')
-
-    def help_count(self):
-        """Displays the function of the count command."""
-        print('Counts the number of instances of a certain class')
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()

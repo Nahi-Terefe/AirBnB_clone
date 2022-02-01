@@ -16,8 +16,8 @@ import os.path
 
 
 class FileStorage:
-    """
-    Class FileStorage that serializes and deserialize instances to JSON
+    """ Class FileStorage that serilizes
+    and deserialize instances to JSON
         __file_path: the path of the json file
         __objects: a dictionnary of all objects"
     """

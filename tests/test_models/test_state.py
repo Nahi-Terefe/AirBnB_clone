@@ -1,68 +1,47 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
-The ``test_state`` module
-==============================
-Using ``test_state``
--------------------------
-This is a test_state unittest file to test the state module.
-"""
-import unittest
-from models.state import State
-import datetime
-import json
-import os
+Unitest for models/state.py
 
-
-class TestState(unittest.TestCase):
-    """Defines a class TestState.
-    Test functionality of the state module.
+Unittest classes:
+    test_state_instantiates
+    test_state_save
+    test_state_dict
     """
-    a = [State, "State"]
 
-    def tearDown(self):
-        """Remove storage file after test ends."""
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
+import unittest
+import models
+from models.state import State
 
-    def test_create(self):
-        """Test if the created class is same type."""
-        obj = TestState.a[0]()
-        self.assertIsInstance(obj, TestState.a[0])
 
-    def test_id(self):
-        """Tests if id is of type str."""
-        obj = TestState.a[0]()
-        self.assertEqual(type(obj.id), str)
+class test_state_instantiates(unittest.TestCase):
+    """ Unittest for testing instantiation"""
 
-    def test_time(self):
-        """Tests if the created and updated date is equal at creation."""
-        obj = TestState.a[0]()
-        self.assertEqual(obj.created_at, obj.updated_at)
+    def test_instantiation(self):
+        self.assertIs(State, type(State()))
 
-    def test_created_at(self):
-        """Tests if created_at is of type datetime."""
-        obj = TestState.a[0]()
-        self.assertEqual(type(obj.created_at), datetime.datetime)
+    def test_instantiation_with_kwargs(self):
+        self.assertIs(State, type(State(name="California")))
 
-    def test_updated_at(self):
-        """Test is updated_at is of type datetime."""
-        obj = TestState.a[0]()
-        self.assertEqual(type(obj.updated_at), datetime.datetime)
 
-    def test_str(self):
-        """Tests if the string representation is correct format."""
-        obj = TestState.a[0]()
-        self.assertEqual(str(obj), '[{}] ({}) {}'.format(TestState.a[1],
-                         obj.id,
-                         obj.__dict__))
+class test_state_save(unittest.TestCase):
+    """ Unittest for testing save"""
 
     def test_save(self):
-        """Tests if the saved attributes are the same as the original."""
-        obj = TestState.a[0]()
-        obj.save()
-        key = TestState.a[1] + "." + obj.id
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertEqual(j[key], obj.to_dict())
+        state = State()
+        state.save()
+        self.assertNotEqual(state.created_at, state.updated_at)
+
+    def test_save_updated(self):
+        state = State()
+        state.save()
+        state.save()
+        self.assertNotEqual(state.created_at, state.updated_at)
+
+    def test_save_to_json(self):
+        state = State()
+        state.save()
+        self.assertIs(type(state.to_dict()), dict)
+
+
+if __name__ == "__main__":
+    unittest.main()

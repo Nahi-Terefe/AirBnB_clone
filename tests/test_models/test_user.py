@@ -1,68 +1,52 @@
-#!/usr/bin/python3
-"""
-The ``test_user`` module
-==============================
-Using ``test_user``
--------------------------
-This is a test_user unittest file to test the user module.
-"""
+#!/usr/bin/env python3
+
 import unittest
 from models.user import User
-import datetime
-import json
-import os
+from models.base_model import BaseModel
 
 
-class TestUser(unittest.TestCase):
-    """Defines a class TestUser.
-    Test functionality of the user module.
-    """
-    a = [User, "User"]
+class testUser(unittest.TestCase):
+    """ unittests for User class """
+    def test_inherit(self):
+        """ checks if it inherits from BaseModel """
+        self.assertTrue(issubclass(User, BaseModel))
 
-    def tearDown(self):
-        """Remove storage file after test ends."""
-        try:
-            os.remove('file.json')
-        except Exception:
-            pass
+    def test_attributes(self):
+        """ checks if it has attributes """
+        user = User()
+        self.assertTrue(hasattr(user, "email"))
+        self.assertTrue(hasattr(user, "password"))
+        self.assertTrue(hasattr(user, "first_name"))
+        self.assertTrue(hasattr(user, "last_name"))
 
-    def test_create(self):
-        """Test if the created class is same type."""
-        obj = TestUser.a[0]()
-        self.assertIsInstance(obj, TestUser.a[0])
+    def test_types(self):
+        """ checks if it has correct types """
+        user = User()
+        self.assertEqual(type(user.email), str)
+        self.assertEqual(type(user.password), str)
+        self.assertEqual(type(user.first_name), str)
+        self.assertEqual(type(user.last_name), str)
 
-    def test_id(self):
-        """Tests if id is of type str."""
-        obj = TestUser.a[0]()
-        self.assertEqual(type(obj.id), str)
-
-    def test_time(self):
-        """Tests if the created and updated date is equal at creation."""
-        obj = TestUser.a[0]()
-        self.assertEqual(obj.created_at, obj.updated_at)
-
-    def test_created_at(self):
-        """Tests if created_at is of type datetime."""
-        obj = TestUser.a[0]()
-        self.assertEqual(type(obj.created_at), datetime.datetime)
-
-    def test_updated_at(self):
-        """Test is updated_at is of type datetime."""
-        obj = TestUser.a[0]()
-        self.assertEqual(type(obj.updated_at), datetime.datetime)
+    def test_values(self):
+        """ checks if it has correct values """
+        user = User()
+        self.assertEqual(user.email, "")
+        self.assertEqual(user.password, "")
+        self.assertEqual(user.first_name, "")
+        self.assertEqual(user.last_name, "")
 
     def test_str(self):
-        """Tests if the string representation is correct format."""
-        obj = TestUser.a[0]()
-        self.assertEqual(str(obj), '[{}] ({}) {}'.format(TestUser.a[1],
-                         obj.id,
-                         obj.__dict__))
+        """ checks if it has correct str representation """
+        user = User()
+        string = "[User] ({}) {}".format(user.id, user.__dict__)
+        self.assertEqual(user.__str__(), string)
 
     def test_save(self):
-        """Tests if the saved attributes are the same as the original."""
-        obj = TestUser.a[0]()
-        obj.save()
-        key = TestUser.a[1] + "." + obj.id
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertEqual(j[key], obj.to_dict())
+        """ checks if it saves correctly """
+        user = User()
+        user.save()
+        self.assertNotEqual(user.created_at, user.updated_at)
+
+
+if __name__ == '__main__':
+    unittest.main()
