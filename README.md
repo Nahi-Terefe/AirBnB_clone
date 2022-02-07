@@ -10,9 +10,10 @@
 * [0x02 Environment](#0x02-Environment)
 * [0x03 Installation](#0x03-Installation)
 * [0x04 Testing](#0x04-Testing)
-* [0x05 Usage](#0x05-Usage)
-* [0x06 License](#0x07-License)
-* [0x07 Contributing](#0x08-Contributing)
+* [0x05 Usage](#0x05-usage)
+* [0x06 Web-Static](#0x05-web-static)
+* [0x07 License](#0x07-license)
+* [0x08 Contributing](#0x08-Contributing)
 * [0x0A References](#0x0A-References)
 * [0x0B Credits](#0x0B-Credits)
 
@@ -24,10 +25,10 @@ The console is a command interpreter to manage objects abstraction between objec
 
 To see the fundamental background of the project visit the [Wiki](https://github.com/ralexrivero/AirBnB_clone/wiki).
 
-The console willl perform the following tasks:
+The console will perform the following tasks:
 
 * create a new object
-* retrive an object from a file
+* retrieve an object from a file
 * do operations on objects
 * destroy an object
 
@@ -262,11 +263,27 @@ show <class> <id>
 (hbnb)
 
 ```
-## 0x06 License
+## 0x05 Web Static
+
+* [0-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/0-index.html)
+* [1-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/1-index.html)
+* [2-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/2-index.html)
+* [3-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/3-index.html)
+* [4-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/4-index.html)
+* [5-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/5-index.html)
+* [6-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/6-index.html)
+* [7-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/7-index.html)
+* [8-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/8-index.html)
+* [100-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/100-index.html)
+* [101-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/101-index.html)
+* [102-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/102-index.html)
+* [103-index.html](https://Nahi-Terefe.github.io/AirBnB_clone/web_static/103-index.html)
+
+## 0x07 License
 
 This project is under the MIT License.
 
-## 0x07 Contributing
+## 0x08 Contributing
 
 This is a team project for practice and learning purposes. Contribution is welcome and encouraged.
 ## 0x0A References
